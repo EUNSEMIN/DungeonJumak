@@ -6,22 +6,23 @@ using Data.Object;
 
 public class Skill : MonoBehaviour
 {
-    [SerializeField]
-    private SkillData_Base m_data;
+    #region Variables
 
-    // 스킬 정보 확인
-    public void WatchSkillInfo()
-    {
-        Debug.Log("스킬 이름: " + m_data.Name);
-        Debug.Log("스킬 데미지: " + m_data.Damage);
-        Debug.Log("스킬 관통력: " + m_data.Per);
-        Debug.Log("스킬 넉백력: " + m_data.KnockBack);
-    }
+    public SkillDataSO data; // SO
 
-    // 몬스터와 스킬이 충돌했을 때
-    private void OnTriggerEnter2D(Collider2D collision)
+    [Header("던전 플레이어")]
+    [SerializeField] private DunjeonPlayer dPlayer; // 플레이어 스캐너
+
+    //-- 컨트롤러 --//
+    private SkillController controller;
+
+    //-- 컴포넌트 --//
+    private Transform transform;
+
+    #endregion
+
+    private void Awake()
     {
-        if (!collision.CompareTag("Monster"))
-            return;
+        controller = new SkillController(this, transform, data, dPlayer);
     }
 }
