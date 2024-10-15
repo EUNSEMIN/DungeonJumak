@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: 00. FireBall
   m_EditorClassIdentifier: 
   name: FireBall
-  id: 0
+  skillId: 0
+  prefabId: 0
   damage: 0.5
   per: 1
   knockBack: 1
+  coolTime: 5
+  count: 1
+  speed: 3
+  duration: 3

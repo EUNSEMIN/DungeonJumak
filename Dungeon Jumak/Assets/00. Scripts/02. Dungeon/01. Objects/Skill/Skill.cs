@@ -1,28 +1,43 @@
-// Engine
 using UnityEngine;
-
-// Ect
 using Data.Object;
 
+[DisallowMultipleComponent]
 public class Skill : MonoBehaviour
 {
-    #region Variables
+    public SkillDataSO skillData; // SO
 
-    public SkillDataSO data; // SO
+    private Rigidbody2D rigid;
 
-    [Header("던전 플레이어")]
-    [SerializeField] private DunjeonPlayer dPlayer; // 플레이어 스캐너
-
-    //-- 컨트롤러 --//
+    private float damage;
+    private float per;
+    private float knockBack;
     private SkillController controller;
 
-    //-- 컴포넌트 --//
-    private Transform transform;
-
-    #endregion
-
-    private void Awake()
+    public void Init(Vector3 direction)
     {
-        controller = new SkillController(this, transform, data, dPlayer);
+        this.damage = skillData.damage;
+        this.per = skillData.per;
+        this.knockBack = skillData.knockBack;
+
+        if (per > -1)
+        {
+            rigid.velocity = direction * 10f;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (!collision.CompareTag("Monster") || per == -1)
+            return;
+
+        per--;
+
+        if (per == -1)
+        {
+            rigid.velocity = Vector2.zero;
+
+            gameObject.SetActive(false);
+        }
+
     }
 }

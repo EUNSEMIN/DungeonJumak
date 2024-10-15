@@ -1,98 +1,162 @@
-//Engine
-using UnityEngine;
+//System
+using System.Collections;
+using System.Collections.Generic;
 
-//Ect
+//Unity
+using UnityEngine;
+using UnityEngine.UI;
+
 using Data.Object;
+using System.Runtime.ConstrainedExecution;
 using UnityEditor.EditorTools;
 
-public class SkillController 
+public class SkillController : MonoBehaviour
 {
-    #region Vairables
+    [Header("SO")]
+    public SkillDataSO dataSO;
 
-    private SkillDataSO data; // SO
-    private Transform transform;
-    private DunjeonPlayer dPlayer; // 플레이어
-    private Scanner scanner; // 스캐너
-    private PoolManager<Skill> pool; // 풀
-    private bool canSkill = false; // 스킬 사용 가능 여부
+    [Header("프리팹")]
+    [SerializeField] private Skill prefab;
 
-    //-- 풀매니저 관련 --//
-    private Skill prefab;
-    private float spawnDelay = 1.0f;
-    private int maxCount = 5;
+    [Header("스킬 사용 가능 여부")]
+    public bool canSkill;
 
-    #endregion
+    [Header("스캐너")]
+    [SerializeField] private Scanner scanner;
 
-    public SkillController(Skill prefab, Transform _transform, SkillDataSO _data, DunjeonPlayer _player)
+    [Header("스킬 하이드 이미지")]
+    [SerializeField] private Image hideImage;
+
+    [Header("풀 생성 개수")]
+    [SerializeField] private int maxSpawnCount = 5;
+
+    [Header("스킬 대기 시간 (진행 중)")]
+    public float timer;
+
+    private float currentDuration = 0;
+
+    private PoolManager<Skill> poolManager;
+
+    private void Start()
     {
-        transform = _transform;
-        dPlayer = _player;
-    }
-
-    private void Awake()
-    {
-        scanner = dPlayer.scanner;
-
         // 풀 매니저 초기화
-        pool = new PoolManager<Skill>(transform);
-        pool.CreatePool(prefab, 20);
+        poolManager = new PoolManager<Skill>(transform);
+        poolManager.CreatePool(prefab, maxSpawnCount);
     }
 
-    public void Update()
+    private void Update()
     {
-        switch (data.ID)
+        if (hideImage.gameObject.activeSelf)
         {
-            // [ID:1] 기본 공격
+            hideImage.fillAmount = timer / dataSO.coolTime;
+        }
+
+        switch (dataSO.skillId)
+        {
+            //Fire Ball
             case 0:
-                FireBall();
+                break;
+            //Fire Shield
+            case 1:
+                break;
+            //Fire Flooring
+            case 2:
                 break;
 
-            // [ID:2] 불꽃 고리
+            default:
+                break;
+        }
+
+        CoolTime();
+    }
+
+    #region Common Method
+
+    //Common Method : Init
+    public void Init()
+    {
+        switch (dataSO.skillId)
+        {
+            //Fire Ball
+            case 0:
+                break;
+
+            //Fire Shield
             case 1:
                 break;
 
-            // [ID:3] 바람 베기
-            case 2:
+            //Fire Flooring
+            case 3:
+                break;
+
+            default:
                 break;
         }
     }
 
-    #region Fire Ball Method
-
-    private void FireBall()
+    //!Common Method : CoolTime
+    private void CoolTime()
     {
-        // 주변에 적이 없으면
+        if (!canSkill && hideImage.gameObject.activeSelf)
+        {
+            timer += Time.deltaTime;
+
+            if (timer > dataSO.coolTime)
+            {
+                canSkill = true;
+
+                hideImage.gameObject.SetActive(false);
+
+                timer = 0f;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Fire Ball
+
+    //Fire Ball : Fire Ball Casting Method
+    public void FireBall()
+    {
+        //if can't search target
         if (!scanner.nearestTarget)
         {
             Debug.Log("주변에 적이 없다!");
             return;
         }
 
-        // 주변에 적이 있고, 스킬 사용 가능하면
         if (canSkill)
         {
             canSkill = false;
 
-            // 타겟 오브젝트 포지션 할당
+            //Hide Skill Image
+            hideImage.gameObject.SetActive(true);
+
+            //Get Tartget Position
             Vector3 targetPos = scanner.nearestTarget.position;
 
-            // 방향 계산
+            //Get Direction
             Vector3 direction = targetPos - transform.position;
 
-            // 노멀라이즈
+            //Nomalized
             direction = direction.normalized;
 
             //pooling fire ball
-            Transform fireball = pool.GetFromPool(prefab).transform;
+            Transform fireball = poolManager.GetFromPool(prefab).transform;
 
             //reposition
             fireball.position = transform.position;
 
             //rotation
             fireball.rotation = Quaternion.FromToRotation(Vector3.up, direction);
+
+            //Init
+            fireball.GetComponent<Skill>().Init(direction);
+
+            hideImage.gameObject.SetActive(true);
         }
     }
 
-    #endregion 
-
+    #endregion Fire Ball
 }

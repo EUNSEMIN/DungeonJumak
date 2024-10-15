@@ -66,9 +66,4 @@ public class MonsterSpawner : MonoBehaviour
         // 사용된 스폰 포인트 제거
         availableSpawnPoints.RemoveAt(spawnIndex);
     }
-
-    public void ReturnToPool(Monster monster)
-    {
-        poolManager.ReturnToPool(prefab, monster);
-    }
 }
