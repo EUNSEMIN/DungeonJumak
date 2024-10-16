@@ -1,43 +1,43 @@
+// Engine
 using UnityEngine;
+
+// Ect
 using Data.Object;
 
-[DisallowMultipleComponent]
-public class Skill : MonoBehaviour
+namespace Skill
 {
-    public SkillDataSO skillData; // SO
-
-    private Rigidbody2D rigid;
-
-    private float damage;
-    private float per;
-    private float knockBack;
-    private SkillController controller;
-
-    public void Init(Vector3 direction)
+    public class Skill : MonoBehaviour
     {
-        this.damage = skillData.damage;
-        this.per = skillData.per;
-        this.knockBack = skillData.knockBack;
+        [Header("SO")]
+        public SkillDataSO skillData;
 
-        if (per > -1)
+        private Rigidbody2D rigid;
+        private float per;
+
+        public void Init(Vector3 direction)
         {
-            rigid.velocity = direction * 10f;
+            this.per = skillData.per;
+
+            if (per > -1)
+            {
+                rigid.velocity = direction * 10f;
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (!collision.CompareTag("Monster") || per == -1)
+                return;
+
+            per--;
+
+            if (per == -1)
+            {
+                rigid.velocity = Vector2.zero;
+                gameObject.SetActive(false);
+            }
+
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (!collision.CompareTag("Monster") || per == -1)
-            return;
-
-        per--;
-
-        if (per == -1)
-        {
-            rigid.velocity = Vector2.zero;
-
-            gameObject.SetActive(false);
-        }
-
-    }
 }

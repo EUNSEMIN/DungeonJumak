@@ -1,21 +1,32 @@
+// System
 using System;
 using System.Collections.Generic;
-using UnistrokeGestureRecognition;
+
+// Unity
 using Unity.Jobs;
 using UnityEngine;
 
-namespace UnistrokeGestureRecognition.Example {
-    public sealed class ExampleRecognizerController : MonoBehaviour {
-        // This is a simple example of how to use this package
-
-        // Set of patterns for recognition
+namespace UnistrokeGestureRecognition.Example 
+{
+    public sealed class ExampleRecognizerController : MonoBehaviour 
+    {
+        [Header("사용 패턴 목록")]
         [SerializeField] private List<ExampleGesturePattern> _patterns;
+
+        [Header("새로운 포인트까지의 최소 거리")]
         [SerializeField, Range(0f, 10f)] private float _newPointMinDistance = 1f;
 
+        [Header("Line Drawer")]
         [SerializeField] private PathDrawerBase _pathDrawer;
+
+        [Header("Name Controller")]
         [SerializeField] private NameController _nameController;
 
+        [Header("01: FireRing")]
+        [SerializeField] private Skill.Controller.SkillController fireRing;
+
         private Camera _camera;
+
         private IGestureRecorder _gestureRecorder;
 
         private IGestureRecognizer<ExampleGesturePattern> _recognizer;
@@ -77,12 +88,22 @@ namespace UnistrokeGestureRecognition.Example {
             // A score is a value in the range of 0 to 1.
             // Where 1 means that the recorded path is exactly the same as the pattern path.
             // 0.7 is a good choice, but you can choose another value.
-            if (result.Score >= .7f) {
+            if (result.Score >= .7f) 
+            {
                 // Get the recognized pattern from the result
                 ExampleGesturePattern recognizedPattern = result.Pattern;
                 _nameController.Set(recognizedPattern.Name);
-                
-                Debug.Log($"{recognizedPattern.Name}: {result.Score}");
+
+                switch (recognizedPattern.Name)
+                {
+                    case "FireRing":
+                        fireRing.FireBall();
+                        break;
+                    default:
+                        break;
+                }
+
+                Debug.Log($"{recognizedPattern.Name}");
             }
 
             _recognizeJob = null;
@@ -106,14 +127,46 @@ namespace UnistrokeGestureRecognition.Example {
             _gestureRecorder.Reset();
         }
 
-        private void RecordNewPoint() {
-            var screenPosition = Input.mousePosition;
-            Vector2 point = _camera.ScreenToWorldPoint(screenPosition);
+        private void RecordNewPoint()
+        {
+            if (Input.touchCount > 0)
+            {
+                Touch touch = Input.GetTouch(0);
+                Vector2 touchPosition = touch.position;
 
-            if (Input.GetKey(KeyCode.Mouse0)) {
-                _gestureRecorder.RecordPoint(new Vector2(screenPosition.x, screenPosition.y));
-                // Show gesture path
-                _pathDrawer.AddPoint(point);
+                if (touch.phase == TouchPhase.Moved)
+                {
+                    Vector2 mobileTouchPosition = new Vector2(touch.position.x, touch.position.y);
+
+                    Camera camera = FindObjectOfType<Camera>();
+
+                    float minX = ((Screen.width - 1000) / 2);
+                    float maxX = Screen.width - (Screen.width * camera.rect.x);
+
+                    float minY = (((Screen.height / 2) - 850) / 2) + (Screen.height * camera.rect.y);
+                    float maxY = 850 + (((Screen.height / 2) - 1200) / 2);
+
+
+                    if (mobileTouchPosition.x >= minX && mobileTouchPosition.x <= maxX && mobileTouchPosition.y >= minY && mobileTouchPosition.y <= maxY)
+                    {
+                        Vector2 point = _camera.ScreenToWorldPoint(mobileTouchPosition);
+                        _gestureRecorder.RecordPoint(point);
+                        // Show gesture path
+                        _pathDrawer.AddPoint(point);
+                    }
+                }
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                var screenPosition = Input.mousePosition;
+
+                if (screenPosition.x >= 100 && screenPosition.x <= 980 && screenPosition.y >= 100 && screenPosition.y <= 500)
+                {
+                    Vector2 point = _camera.ScreenToWorldPoint(screenPosition);
+                    _gestureRecorder.RecordPoint(new Vector2(screenPosition.x, screenPosition.y));
+                    // Show gesture path
+                    _pathDrawer.AddPoint(point);
+                }
             }
         }
 

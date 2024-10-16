@@ -6,157 +6,153 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Ect
 using Data.Object;
-using System.Runtime.ConstrainedExecution;
-using UnityEditor.EditorTools;
 
-public class SkillController : MonoBehaviour
+namespace Skill.Controller
 {
-    [Header("SO")]
-    public SkillDataSO dataSO;
-
-    [Header("프리팹")]
-    [SerializeField] private Skill prefab;
-
-    [Header("스킬 사용 가능 여부")]
-    public bool canSkill;
-
-    [Header("스캐너")]
-    [SerializeField] private Scanner scanner;
-
-    [Header("스킬 하이드 이미지")]
-    [SerializeField] private Image hideImage;
-
-    [Header("풀 생성 개수")]
-    [SerializeField] private int maxSpawnCount = 5;
-
-    [Header("스킬 대기 시간 (진행 중)")]
-    public float timer;
-
-    private float currentDuration = 0;
-
-    private PoolManager<Skill> poolManager;
-
-    private void Start()
+    public class SkillController : MonoBehaviour
     {
-        // 풀 매니저 초기화
-        poolManager = new PoolManager<Skill>(transform);
-        poolManager.CreatePool(prefab, maxSpawnCount);
-    }
+        [Header("SO")]
+        public SkillDataSO dataSO;
 
-    private void Update()
-    {
-        if (hideImage.gameObject.activeSelf)
+        [Header("스킬 사용 가능 여부")]
+        public bool canSkill;
+
+        [Header("스캐너")]
+        [SerializeField] private Scanner scanner;
+
+        [Header("스킬 하이드 이미지")]
+        [SerializeField] private Image hideImage;
+
+        [Header("풀 생성용 프리팹")]
+        [SerializeField] private Skill prefab;
+
+        [Header("풀 생성 개수")]
+        [SerializeField] private int maxSpawnCount = 5;
+
+        private float timer; // 대기 시간
+        private PoolManager<Skill> poolManager; // 풀매니저
+
+        private void Start()
         {
-            hideImage.fillAmount = timer / dataSO.coolTime;
+            timer = dataSO.waitingTime;
+
+            //-- 풀 매니저 초기화 --//
+            poolManager = new PoolManager<Skill>(transform);
+            poolManager.CreatePool(prefab, maxSpawnCount);
         }
 
-        switch (dataSO.skillId)
+        private void Update()
         {
-            //Fire Ball
-            case 0:
-                break;
-            //Fire Shield
-            case 1:
-                break;
-            //Fire Flooring
-            case 2:
-                break;
-
-            default:
-                break;
-        }
-
-        CoolTime();
-    }
-
-    #region Common Method
-
-    //Common Method : Init
-    public void Init()
-    {
-        switch (dataSO.skillId)
-        {
-            //Fire Ball
-            case 0:
-                break;
-
-            //Fire Shield
-            case 1:
-                break;
-
-            //Fire Flooring
-            case 3:
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    //!Common Method : CoolTime
-    private void CoolTime()
-    {
-        if (!canSkill && hideImage.gameObject.activeSelf)
-        {
-            timer += Time.deltaTime;
-
-            if (timer > dataSO.coolTime)
+            if (hideImage.gameObject.activeSelf)
             {
-                canSkill = true;
+                hideImage.fillAmount = timer / dataSO.coolTime;
+            }
 
-                hideImage.gameObject.SetActive(false);
+            switch (dataSO.skillId)
+            {
+                //Fire Ball
+                case 0:
+                    break;
+                //Fire Shield
+                case 1:
+                    break;
+                //Fire Flooring
+                case 2:
+                    break;
 
-                timer = 0f;
+                default:
+                    break;
+            }
+
+            CoolTime();
+        }
+
+        #region Common Method
+
+        //Common Method : Init
+        public void Init()
+        {
+            switch (dataSO.skillId)
+            {
+                //Fire Ball
+                case 0:
+                    break;
+
+                //Fire Shield
+                case 1:
+                    break;
+
+                //Fire Flooring
+                case 3:
+                    break;
+
+                default:
+                    break;
             }
         }
-    }
 
-    #endregion
-
-    #region Fire Ball
-
-    //Fire Ball : Fire Ball Casting Method
-    public void FireBall()
-    {
-        //if can't search target
-        if (!scanner.nearestTarget)
+        //!Common Method : CoolTime
+        private void CoolTime()
         {
-            Debug.Log("주변에 적이 없다!");
-            return;
+            if (!canSkill && hideImage.gameObject.activeSelf)
+            {
+                timer += Time.deltaTime;
+
+                if (timer > dataSO.coolTime)
+                {
+                    canSkill = true;
+
+                    hideImage.gameObject.SetActive(false);
+
+                    timer = 0f;
+                }
+            }
         }
 
-        if (canSkill)
+        #endregion
+
+        #region FireBall
+
+        // 스킬 01: FireBall (화염구 던지기)
+        public void FireBall()
         {
-            canSkill = false;
+            // 스캔 범위 내에 적이 없을 때
+            if (!scanner.nearestTarget)
+            {
+                return;
+            }
 
-            //Hide Skill Image
-            hideImage.gameObject.SetActive(true);
+            // 스캔 범위 내에 적이 존재하고 스킬 사용 가능할 때
+            if (scanner.nearestTarget && canSkill)
+            {
+                canSkill = false;
 
-            //Get Tartget Position
-            Vector3 targetPos = scanner.nearestTarget.position;
+                hideImage.gameObject.SetActive(true);
 
-            //Get Direction
-            Vector3 direction = targetPos - transform.position;
+                // 타겟 몬스터 위치
+                Vector3 targetPos = scanner.nearestTarget.position;
 
-            //Nomalized
-            direction = direction.normalized;
+                // 방향 계산
+                Vector3 direction = targetPos - transform.position;
+                direction = direction.normalized;
 
-            //pooling fire ball
-            Transform fireball = poolManager.GetFromPool(prefab).transform;
+                // 스킬 풀링
+                Transform fireball = poolManager.GetFromPool(prefab).transform;
 
-            //reposition
-            fireball.position = transform.position;
+                // 스킬 위치 초기화
+                fireball.position = transform.position;
 
-            //rotation
-            fireball.rotation = Quaternion.FromToRotation(Vector3.up, direction);
+                // 회전
+                fireball.rotation = Quaternion.FromToRotation(Vector3.up, direction);
 
-            //Init
-            fireball.GetComponent<Skill>().Init(direction);
-
-            hideImage.gameObject.SetActive(true);
+                // Skill.cs Init() 호풀
+                fireball.GetComponent<Skill>().Init(direction);
+            }
         }
+
+        #endregion Fire Ball
     }
 
-    #endregion Fire Ball
 }

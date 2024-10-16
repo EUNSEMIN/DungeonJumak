@@ -78,12 +78,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataSO: {fileID: 11400000, guid: 3f020c50e820c4f488664681cea17728, type: 2}
-  prefab: {fileID: 2959472084094758617, guid: 0f33878b6bee27047b0c3d92592daa49, type: 3}
   canSkill: 1
   scanner: {fileID: 5253071294531475889}
-  hideImage: {fileID: 0}
+  hideImage: {fileID: 4867699906396996543, guid: 77853b67357e83643b995cff81e5be63, type: 3}
+  prefab: {fileID: 2959472084094758617, guid: 0f33878b6bee27047b0c3d92592daa49, type: 3}
   maxSpawnCount: 5
-  timer: 0
 --- !u!1 &2161117938740374982
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,8 +92,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 717869701280374627}
+  - component: {fileID: 1079572447473013009}
   m_Layer: 9
-  m_Name: 'Skill2: '
+  m_Name: 'Skill2: FireRing'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -115,6 +115,24 @@ Transform:
   m_Father: {fileID: 8592446653571854134}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1079572447473013009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2161117938740374982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 349996926e383144cbe2c0dc40e956c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataSO: {fileID: 11400000, guid: 10a26eec5987494458568a4403cff33f, type: 2}
+  canSkill: 0
+  scanner: {fileID: 5253071294531475889}
+  hideImage: {fileID: 4867699906396996543, guid: 77853b67357e83643b995cff81e5be63, type: 3}
+  prefab: {fileID: 2295282460354024149, guid: 99e114f324c376f4f90cbe5c0116e462, type: 3}
+  maxSpawnCount: 5
 --- !u!1 &5240706437172317976
 GameObject:
   m_ObjectHideFlags: 0
