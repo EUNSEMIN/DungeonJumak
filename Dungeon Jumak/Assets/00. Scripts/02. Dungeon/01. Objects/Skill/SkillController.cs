@@ -33,6 +33,7 @@ namespace Skill.Controller
 
         private float timer; // 대기 시간
         private PoolManager<Skill> poolManager; // 풀매니저
+        private Coroutine skillCoroutine; // 코루틴 변수
 
         private void Start()
         {
@@ -41,6 +42,8 @@ namespace Skill.Controller
             //-- 풀 매니저 초기화 --//
             poolManager = new PoolManager<Skill>(transform);
             poolManager.CreatePool(prefab, maxSpawnCount);
+
+            skillCoroutine = StartCoroutine(AutoFireBall());
         }
 
         private void Update()
@@ -125,7 +128,7 @@ namespace Skill.Controller
             }
 
             // 스캔 범위 내에 적이 존재하고 스킬 사용 가능할 때
-            if (scanner.nearestTarget && canSkill)
+            if (scanner.nearestTarget)
             {
                 canSkill = false;
 
@@ -152,6 +155,16 @@ namespace Skill.Controller
             }
         }
 
+        // 01-1: AutoFireBall: 일정 시간마다 FireBall 스킬 발사
+        private IEnumerator AutoFireBall()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(2f);
+
+                FireBall();
+            }
+        }
         #endregion Fire Ball
     }
 

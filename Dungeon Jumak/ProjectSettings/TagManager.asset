@@ -13,6 +13,7 @@ TagManager:
   - Customer_Exit
   - Monster
   - Background_Obj
+  - Skill
   layers:
   - Default
   - TransparentFX

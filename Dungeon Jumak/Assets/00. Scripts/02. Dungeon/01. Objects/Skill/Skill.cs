@@ -14,6 +14,11 @@ namespace Skill
         private Rigidbody2D rigid;
         private float per;
 
+        public void Awake()
+        {
+            rigid = GetComponent<Rigidbody2D>();
+        }
+
         public void Init(Vector3 direction)
         {
             this.per = skillData.per;
@@ -29,13 +34,18 @@ namespace Skill
             if (!collision.CompareTag("Monster") || per == -1)
                 return;
 
-            per--;
+            Debug.Log("Hit Monster");
+
+            rigid.velocity = Vector2.zero;
+            gameObject.SetActive(false);
+
+            /*per--;
 
             if (per == -1)
             {
                 rigid.velocity = Vector2.zero;
                 gameObject.SetActive(false);
-            }
+            }*/
 
         }
     }

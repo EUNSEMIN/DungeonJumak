@@ -33,6 +33,8 @@ namespace UnistrokeGestureRecognition.Example
 
         private JobHandle? _recognizeJob;
 
+        private float timer;
+
         private void Awake() {
             // Use this class to record the gesture path.
             // It uses a resampling algorithm to capture long paths to a limited size buffer.
@@ -97,7 +99,8 @@ namespace UnistrokeGestureRecognition.Example
                 switch (recognizedPattern.Name)
                 {
                     case "FireRing":
-                        fireRing.FireBall();
+                        //fireRing.FireBall();
+                        Debug.Log("Draw Fireball");
                         break;
                     default:
                         break;
@@ -127,47 +130,27 @@ namespace UnistrokeGestureRecognition.Example
             _gestureRecorder.Reset();
         }
 
+        //Record New Point
         private void RecordNewPoint()
         {
-            if (Input.touchCount > 0)
+            if (Input.GetMouseButton(0))
             {
-                Touch touch = Input.GetTouch(0);
-                Vector2 touchPosition = touch.position;
+                //Increase Timer
+                timer += Time.deltaTime;
 
-                if (touch.phase == TouchPhase.Moved)
+                if (timer >= 0.1f)
                 {
-                    Vector2 mobileTouchPosition = new Vector2(touch.position.x, touch.position.y);
+                    var screenPosition = Input.mousePosition;
 
-                    Camera camera = FindObjectOfType<Camera>();
-
-                    float minX = ((Screen.width - 1000) / 2);
-                    float maxX = Screen.width - (Screen.width * camera.rect.x);
-
-                    float minY = (((Screen.height / 2) - 850) / 2) + (Screen.height * camera.rect.y);
-                    float maxY = 850 + (((Screen.height / 2) - 1200) / 2);
-
-
-                    if (mobileTouchPosition.x >= minX && mobileTouchPosition.x <= maxX && mobileTouchPosition.y >= minY && mobileTouchPosition.y <= maxY)
-                    {
-                        Vector2 point = _camera.ScreenToWorldPoint(mobileTouchPosition);
-                        _gestureRecorder.RecordPoint(point);
-                        // Show gesture path
-                        _pathDrawer.AddPoint(point);
-                    }
-                }
-            }
-            else if (Input.GetMouseButton(0))
-            {
-                var screenPosition = Input.mousePosition;
-
-                if (screenPosition.x >= 100 && screenPosition.x <= 980 && screenPosition.y >= 100 && screenPosition.y <= 500)
-                {
                     Vector2 point = _camera.ScreenToWorldPoint(screenPosition);
                     _gestureRecorder.RecordPoint(new Vector2(screenPosition.x, screenPosition.y));
                     // Show gesture path
                     _pathDrawer.AddPoint(point);
                 }
             }
+            else if (Input.GetMouseButtonUp(0))
+                //Init Timer
+                timer = 0f;
         }
 
         private void OnValidate() {

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2959472084094758617}
   m_Layer: 0
   m_Name: 00. FireBall
-  m_TagString: Untagged
+  m_TagString: Skill
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,5 +137,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillData: {fileID: 11400000, guid: 3f020c50e820c4f488664681cea17728, type: 2}
-  player: {fileID: 0}
-  poolParent: {fileID: 0}

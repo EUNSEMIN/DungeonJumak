@@ -14,9 +14,6 @@ public class Monster : MonoBehaviour, IDamageable, ITurnable, IMovable
     // SO
     public MonsterDataSO data;
 
-    // 플레이어 transform
-    [SerializeField] private Transform playerTransform;
-
     // 핸들러
     private Mo_AnimationHandler animationHandler;
     private Mo_MoveHandler moveHandler;
@@ -24,6 +21,9 @@ public class Monster : MonoBehaviour, IDamageable, ITurnable, IMovable
     // 컴포넌트
     private Animator animator;
     private SpriteRenderer spriteRenderer;
+
+    // 플레이어 트랜스폼
+    private Transform playerTransform;
 
     #endregion
 
@@ -36,10 +36,16 @@ public class Monster : MonoBehaviour, IDamageable, ITurnable, IMovable
         //--- 핸들러 인스턴스 생성 ---//
         animationHandler = new Mo_AnimationHandler(spriteRenderer, animator);
         moveHandler = new Mo_MoveHandler(transform, playerTransform, data.Speed);
+
+        playerTransform = GameObject.FindWithTag("Player").transform;
     }
 
     private void Update()
     {
         moveHandler.FixedUpdate();
+
+        // 플레이어의 트랜스폼을 업데이트
+        moveHandler.SetPlayerTransform(playerTransform);
+
     }
 }

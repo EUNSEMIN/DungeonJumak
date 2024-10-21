@@ -23,6 +23,11 @@ public class Mo_MoveHandler
         Moving();
     }
 
+    public void SetPlayerTransform(Transform player)
+    {
+        playerTransform = player; // 플레이어의 트랜스폼을 실시간으로 할당
+    }
+
     public void Moving()
     {
         if (playerTransform != null)
@@ -34,11 +39,4 @@ public class Mo_MoveHandler
             );
         }
     }
-
-
-    //public void StopMoving()
-    //{
-    //    // 몬스터의 이동을 멈추는 로직
-    //}
-
 }
