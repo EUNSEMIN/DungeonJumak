@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace UnistrokeGestureRecognition.Example 
 {
-    public sealed class ExampleRecognizerController : MonoBehaviour 
+    public sealed class RecognizerController : MonoBehaviour 
     {
         [Header("사용 패턴 목록")]
         [SerializeField] private List<ExampleGesturePattern> _patterns;
@@ -68,9 +68,6 @@ namespace UnistrokeGestureRecognition.Example
         private void Update() {
             if (Input.GetKeyUp(KeyCode.Mouse0)) {
                 RecognizeRecordedGesture();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Mouse0)) {
                 Clear();
             }
 
@@ -99,8 +96,7 @@ namespace UnistrokeGestureRecognition.Example
                 switch (recognizedPattern.Name)
                 {
                     case "FireRing":
-                        //fireRing.FireBall();
-                        Debug.Log("Draw Fireball");
+                        fireRing.FireRing();
                         break;
                     default:
                         break;

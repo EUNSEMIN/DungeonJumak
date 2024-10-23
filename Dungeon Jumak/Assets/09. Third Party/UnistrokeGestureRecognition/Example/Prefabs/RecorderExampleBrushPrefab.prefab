@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 469062949715034580}
   - component: {fileID: 257565932795064491}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: RecorderExampleBrushPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,26 +87,44 @@ LineRenderer:
   - {x: 22.5, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 0.7
     widthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.6393266
-        inSlope: -0.091674075
-        outSlope: -0.091674075
+        value: 0
+        inSlope: 5.18446
+        outSlope: 5.18446
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.28429422
+        outWeight: 0.11918602
+      - serializedVersion: 3
+        time: 0.46612468
+        value: 1
+        inSlope: 0.086246125
+        outSlope: 0.086246125
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 1
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 0
+        inSlope: -4.6464186
+        outSlope: -4.6464186
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.13959396
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0, b: 0.0075473785, a: 1}
-      key1: {r: 1, g: 0, b: 0.0075473785, a: 1}
+      key0: {r: 0.7058824, g: 0.7058824, b: 0.7058824, a: 1}
+      key1: {r: 0.3207547, g: 0.26527825, b: 0.26527825, a: 1}
       key2: {r: 1, g: 1, b: 1, a: 1}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -132,8 +150,8 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 10
-    numCapVertices: 10
+    numCornerVertices: 1
+    numCapVertices: 1
     alignment: 0
     textureMode: 0
     shadowBias: 0.5

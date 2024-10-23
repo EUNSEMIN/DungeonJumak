@@ -80,7 +80,6 @@ MonoBehaviour:
   dataSO: {fileID: 11400000, guid: 3f020c50e820c4f488664681cea17728, type: 2}
   canSkill: 1
   scanner: {fileID: 5253071294531475889}
-  hideImage: {fileID: 4867699906396996543, guid: 77853b67357e83643b995cff81e5be63, type: 3}
   prefab: {fileID: 2959472084094758617, guid: 0f33878b6bee27047b0c3d92592daa49, type: 3}
   maxSpawnCount: 5
 --- !u!1 &2161117938740374982
@@ -130,9 +129,8 @@ MonoBehaviour:
   dataSO: {fileID: 11400000, guid: 10a26eec5987494458568a4403cff33f, type: 2}
   canSkill: 0
   scanner: {fileID: 5253071294531475889}
-  hideImage: {fileID: 4867699906396996543, guid: 77853b67357e83643b995cff81e5be63, type: 3}
   prefab: {fileID: 2295282460354024149, guid: 99e114f324c376f4f90cbe5c0116e462, type: 3}
-  maxSpawnCount: 5
+  maxSpawnCount: 6
 --- !u!1 &5240706437172317976
 GameObject:
   m_ObjectHideFlags: 0

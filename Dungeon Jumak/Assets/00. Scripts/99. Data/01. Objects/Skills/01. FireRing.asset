@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: 01. FireRing
   m_EditorClassIdentifier: 
   name: FireRing
-  skillId: 0
+  skillId: 1
   prefabId: 0
   coolTime: 5
   damage: 0.5
   count: 3
-  per: 1
+  per: -1
   knockBack: 20
-  speed: 0.8
-  waitingTime: 8
+  speed: 150
+  waitingTime: 3.8709116
   duration: 5
